@@ -1,0 +1,12 @@
+quiz,question_text,question_type,options,correct_option
+Medical Quiz_1,What is the chemical symbol for water?,MCQ,H2O;H2;O2;HO,H2O
+Medical Quiz_1,Name the largest organ in the human body.,SA,,skin
+Medical Quiz_1,The human heart has four chambers.,TF,True;False,True
+Medical Quiz_1,What is the normal pH range of human blood?,FIB,,7.35-7.45
+Medical Quiz_1,Match the medical terms to their definitions.,MQ,heart=organ that pumps blood;lungs=organ for respiration;liver=organ that detoxifies,heart=organ that pumps blood;lungs=organ for respiration;liver=organ that detoxifies
+Medical Quiz_1,Arrange the steps of the blood flow cycle.,OQ,Right atrium;Right ventricle;Lungs;Left atrium;Left ventricle,Right atrium;Right ventricle;Lungs;Left atrium;Left ventricle
+Basics_Prefix_Root_Suffix_1,What does the root 'cardi' refer to?,MCQ,Heart;Liver;Lung;Brain,Heart
+Basics_Prefix_Root_Suffix_1,The prefix 'hypo-' in medical terms indicates what?,MCQ,Below/Under;Above/Over;Normal;Outside,Below/Under
+Basics_Prefix_Root_Suffix_1,What is the meaning of the suffix '-itis'?,MCQ,Inflammation;Condition;Disease;Removal,Inflammation
+Basics_Prefix_Root_Suffix_1,Form a medical term using 'cardi' and '-itis'.,SA,,carditis
+Basics_Prefix_Root_Suffix_1,What is the meaning of the term 'hyperglycemia'?,FIB,,High blood sugar

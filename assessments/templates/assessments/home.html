@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Medical Terminology Assessments</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <!-- Include HTMX -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <!-- Normalize CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cheeky+Rabbit&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap');
+
+        body {
+            font-family: 'Cheeky Rabbit', cursive;
+            background-color: #8b0000;
+            color: #ffffff;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 2px solid #8b0000;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            color: #ffccd5;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            text-align: center;
+            line-height: 1.8;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: #d93a56;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #b82c45;
+            transform: scale(1.05);
+        }
+
+        .loading {
+            display: none;
+            color: #ffe4e1;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .quiz-list {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: #3a3a3a;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: #d93a56;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #b82c45;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Medical Terminology Assessments</h1>
+    <p>Select a quiz to get started and improve your medical terminology!</p>
+
+    <button
+      hx-get="/assessments/"
+      hx-trigger="click"
+      hx-target="#quiz-list"
+      hx-indicator=".loading"
+    >
+      Load Available Quizzes
+    </button>
+    <p class="loading">Loading quizzes...</p>
+
+    <div id="quiz-list" class="quiz-list">
+        <p>No quizzes loaded yet. Click the button above to load quizzes!</p>
+    </div>
+</body>
+</html>
+

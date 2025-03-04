@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ quiz.title }}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <!-- Include HTMX -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <!-- Normalize CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <!-- External stylesheet -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1 {
+        color: #2b8cbe;
+      }
+      .question-container {
+        margin-bottom: 20px;
+      }
+      .loading {
+        display: none;
+        color: #888;
+        font-style: italic;
+      }
+      .submit-button {
+        padding: 12px 20px;
+        background-color: #2b8cbe;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px; /* Add margin to separate the buttons */
+      }
+      .submit-button:hover {
+        background-color: #1f6ca1;
+      }
+      .back-button {
+        display: inline-block;
+        padding: 12px 20px;
+        background-color: #e0e0e0;
+        color: #2b8cbe;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .back-button:hover {
+        background-color: #cfcfcf;
+      }
+      .button-container {
+        margin-top: 30px; /* Increased margin for better separation */
+        display: flex;
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 15px; /* Increased gap for more separation between buttons */
+        align-items: flex-start;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>{{ quiz.title }}</h1>
+
+    <div id="quiz-form-container">
+      <form
+        method="post"
+        hx-post="{% url 'submit_quiz' quiz.id %}"
+        hx-target="#quiz-form-container"
+        hx-swap="outerHTML"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <ul>
+          {% for question in questions %}
+          <li class="question-container">
+            <p>{{ question.question_text|safe }}</p>
+
+            <!-- Display image if it exists -->
+            {% if question.image %}
+            <img
+              src="{{ question.image.url }}"
+              alt="Question Image"
+              style="max-width: 300px; max-height: 300px"
+            />
+            {% endif %} {% if question.question_type == "MCQ" %}
+            <!-- Multiple Choice Questions -->
+            {% for option in question.option_set.all %}
+            <label>
+              <input
+                type="radio"
+                name="answer_{{ question.id }}"
+                value="{{ option.id }}"
+              />
+              {{ option.option_text }} </label
+            ><br />
+            {% endfor %} {% elif question.question_type == "FIB" %}
+            <!-- Fill-in-the-Blank Questions -->
+            <input
+              type="text"
+              name="answer_{{ question.id }}"
+              placeholder="Type your answer here"
+            />
+            {% elif question.question_type == "TF" %}
+            <!-- True/False Questions -->
+            <label>
+              <input
+                type="radio"
+                name="answer_{{ question.id }}"
+                value="True"
+              />
+              True
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="answer_{{ question.id }}"
+                value="False"
+              />
+              False
+            </label>
+            {% elif question.question_type == "SA" %}
+            <!-- Short Answer Questions -->
+            <input
+              type="text"
+              name="answer_{{ question.id }}"
+              placeholder="Type a short answer here"
+            />
+            {% elif question.question_type == "MQ" %}
+            <!-- Matching Questions -->
+            <p>Match the following:</p>
+            {% for pair in question.option_set.all %}
+            <p>{{ pair.option_text }}</p>
+            <!-- Display pairs as needed -->
+            {% endfor %} {% elif question.question_type == "OQ" %}
+            <!-- Ordering Questions -->
+            <p>Order the following:</p>
+            {% for option in question.option_set.all %}
+            <label>
+              <input
+                type="text"
+                name="answer_{{ question.id }}_{{ forloop.counter }}"
+                placeholder="Enter order number"
+              />
+              {{ option.option_text }} </label
+            ><br />
+            {% endfor %} {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="button-container">
+          <button type="submit" class="submit-button">Submit Answers</button>
+          <a href="{% url 'home' %}" class="back-button">Back to Quiz List</a>
+        </div>
+      </form>
+    </div>
+
+    <p class="loading" aria-live="polite">Submitting...</p>
+
+    <script>
+      document.addEventListener("htmx:beforeRequest", function () {
+        document.querySelector(".loading").style.display = "block";
+      });
+      document.addEventListener("htmx:afterRequest", function () {
+        document.querySelector(".loading").style.display = "none";
+      });
+    </script>
+  </body>
+</html>

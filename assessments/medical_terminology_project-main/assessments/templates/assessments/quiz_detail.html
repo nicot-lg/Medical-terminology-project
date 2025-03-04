@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ quiz.title }}</title>
+</head>
+
+<body>
+    <h1>{{ quiz.title }}</h1>
+
+    <form method="post" action="{% url 'submit_quiz' quiz.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul>
+            {% for question in questions %}
+            <li>
+                <p>{{ question.question_text }}</p>
+
+                <!-- Display image if it exists -->
+                {% if question.image %}
+                <img src="{{ question.image.url }}" alt="Question Image" style="max-width: 300px; max-height: 300px;">
+                {% endif %}
+
+                {% if question.question_type == "MCQ" %}
+                <!-- Multiple Choice Questions -->
+                {% for option in question.option_set.all %}
+                <label>
+                    <input type="radio" name="answer_{{ question.id }}" value="{{ option.id }}">
+                    {{ option.option_text }}
+                </label><br>
+                {% endfor %}
+
+                {% elif question.question_type == "FIB" %}
+                <!-- Fill-in-the-Blank Questions -->
+                <input type="text" name="answer_{{ question.id }}" placeholder="Type your answer here">
+
+                {% elif question.question_type == "TF" %}
+                <!-- True/False Questions -->
+                <label>
+                    <input type="radio" name="answer_{{ question.id }}" value="True"> True
+                </label>
+                <label>
+                    <input type="radio" name="answer_{{ question.id }}" value="False"> False
+                </label>
+
+                {% elif question.question_type == "SA" %}
+                <!-- Short Answer Questions -->
+                <input type="text" name="answer_{{ question.id }}" placeholder="Type a short answer here">
+
+                {% elif question.question_type == "MQ" %}
+                <!-- Matching Questions -->
+                <p>Match the following:</p>
+                {% for pair in question.option_set.all %}
+                <p>{{ pair.option_text }}</p> <!-- Display pairs as needed -->
+                {% endfor %}
+
+                {% elif question.question_type == "OQ" %}
+                <!-- Ordering Questions -->
+                <p>Order the following:</p>
+                {% for option in question.option_set.all %}
+                <label>
+                    <input type="text" name="answer_{{ question.id }}_{{ forloop.counter }}"
+                        placeholder="Enter order number">
+                    {{ option.option_text }}
+                </label><br>
+                {% endfor %}
+
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="submit">Submit Answers</button>
+    </form>
+
+    <a href="{% url 'quiz_list' %}">Back to Quiz List</a>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Results</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <!-- Include HTMX -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <!-- Normalize CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <!-- External stylesheet -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1 {
+        color: #2b8cbe;
+      }
+      .question-result {
+        margin-top: 10px;
+      }
+      .feedback {
+        margin-top: 5px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        display: none;
+      }
+      .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #2b8cbe;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+      }
+      .back-button:hover {
+        background-color: #1f6ca1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Results for {{ quiz.title }}</h1>
+    <p>
+      Your Score: {{ score }} out of {{ total_questions }} ({{ percentage_score
+      }}%)
+    </p>
+
+    <ul>
+      {% for question_id, answer in user_answers.items %}
+      <li class="question-result">
+        Question {{ question_id }}: {{ answer }}
+        <button
+          hx-get="/feedback/{{ question_id }}/"
+          hx-target="#feedback-{{ question_id }}"
+          hx-swap="outerHTML"
+          aria-label="View feedback for question {{ question_id }}"
+        >
+          View Feedback
+        </button>
+        <div
+          id="feedback-{{ question_id }}"
+          class="feedback"
+          aria-live="polite"
+        >
+          Feedback will appear here.
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <a
+      href="{% url 'home' %}"
+      class="back-button"
+      aria-label="Back to Quiz List"
+      >Back to Quiz List</a
+    >
+  </body>
+</html>

@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz List</title>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <!-- Include HTMX -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+    />
+    <!-- Normalize CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <!-- External stylesheet -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1 {
+        color: #2b8cbe;
+      }
+      .quiz-list {
+        margin-top: 20px;
+      }
+      #quiz-details {
+        margin-top: 30px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        display: none; /* Initially hidden */
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Available Quizzes</h1>
+    <ul class="quiz-list">
+      {% for quiz in quizzes %}
+      <li>
+        <a
+          href="{% url 'quiz_detail' quiz.id %}"
+          hx-get="{% url 'quiz_detail' quiz.id %}"
+          hx-target="#quiz-details"
+          hx-swap="innerHTML"
+          aria-label="View details for {{ quiz.title }}"
+          >{{ quiz.title }}</a
+        >
+      </li>
+      {% empty %}
+      <li>No quizzes available at the moment.</li>
+      {% endfor %}
+    </ul>
+
+    <div id="quiz-details" aria-live="polite">
+      <!-- Quiz details will be dynamically loaded here -->
+    </div>
+  </body>
+</html>

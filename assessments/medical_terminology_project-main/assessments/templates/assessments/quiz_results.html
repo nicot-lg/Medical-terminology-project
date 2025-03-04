@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+</head>
+
+<body>
+    <h1>Results for {{ quiz.title }}</h1>
+    <p>Your Score: {{ score }} out of {{ total_questions }} ({{ percentage_score }}%)</p>
+
+    <ul>
+        {% for question_id, answer in user_answers.items %}
+        <li>Question {{ question_id }}: {{ answer }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'quiz_list' %}">Back to Quiz List</a>
+</body>
+
+</html>
